@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>远程软硬件自动化测试及管理平台</title>
+
+        <!--引入外部文件的方式-->
+        <!--<script type="text/javascript" src="checkbox.js"></script>-->
+    </head>
+    <body>
+
+    <div id="header">
+
+        <h1>远程软硬件自动化测试及管理平台</h1>
+
+    </div>
+
+        <hr/>
+
+
+        <h3><a href="/admin/">管理员入口</a></h3>
+最新加入的IP组信息:<br/>
+        <ul>
+            {% for ipaddr in ipaddrsPre %}
+            <li>{{ ipaddr.name }} - {{ ipaddr.get_status_display }}</li>
+            {% endfor %}
+        </ul>
+        <hr/>
+请添加IP组信息:<br/>
+        <form action="/" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="提交" />
+        </form>
+<!--
+        <hr/>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">IP组信息:</label><br/>
+            <div class="col-sm-9">
+                {% for ipaddr in ipaddrs %}
+                    <label class="checkbox-inline">
+                        <input value="{{ ipaddr.name }}" type="checkbox" name="ipaddrs"/>{{ ipaddr.name }}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+-->
+
+<!-- <p id="demo">脚本示例</p> -->
+        <hr/>
+
+<!--<form action="DownLoad/" method="POST" style="position:absolute; left:10px"> -->
+
+
+<form action="/operate/" method="POST" ; left:10px">
+     {% csrf_token %}
+功能：远程开关机<br/>
+请选择IP组信息[格式:调试器 服务器]<br/>
+
+<!--
+ <table> 
+      <tr> 
+
+        <td>
+          <div class="form-group">
+           <label><input name="checkStatus" type="submit" onclick="return ischecked()" value="测试在线状态" /> </label> <br />
+          </div>
+        </td>
+
+        <td>
+          <div class="form-group">
+           <label><input name="reset" type="submit" onclick="return ischecked()" value="开机(重启)测试" /> </label> <br />
+          </div>
+        </td>
+
+        <td>
+          <div class="form-group">
+           <label><input name="poweroff" type="submit" onclick="return ischecked()" value="关机测试" /> </label> <br />
+          </div>
+        </td>
+
+      </tr>
+ </table>
+
+-->
+
+ <table> 
+      <tr> 
+
+        <td>
+          <div class="form-group">
+           <label><input name="checkStatus" type="submit" onclick="return ischecked()" value="选择后提交" /> </label> <br />
+          </div>
+        </td>
+<!--
+        <td>
+          <div class="form-group">
+           <label><input name="ejtagDebug" type="submit" onclick="return ischecked()" value="EJTAG测试" /> </label> <br />
+          </div>
+        </td>
+-->
+      </tr>
+ </table>
+
+
+<input type="checkbox" id="chElt" onclick="checkOrCancelAll();"/><span id="mySpan">全选</span> <br />
+
+{% for ipaddr in ipaddrs %}
+    <label class="checkbox-inline">
+
+          <label><input class="file" name="IP_Infos" type="checkbox" value="{{ ipaddr.name }}" />{{ ipaddr.name }}</label> <br />
+    </label>
+{% endfor %}
+<!--
+        </p>
+                <label for="IP_Info">测试按钮:
+                        <input type="button" value="点击测试" onclick="getValue()" />
+                </label>
+        </p>
+-->
+
+</form>
+
+
+<script type="text/javascript">
+//页面加载的时候,所有的复选框都是未选中的状态
+function checkOrCancelAll()
+{
+    var chElt=document.getElementById("chElt");//1.获取checkbo的元素对象    
+    var checkedElt = chElt.checked;//2.获取选中状态
+    var allCheck = document.getElementsByClassName("file");//3.若checked=true,将所有的复选框选中,checked=false,将所有的复选框取消
+ 
+    //var allCheck = document.getElementsByName("file");//方法2
+    var mySpan=document.getElementById("mySpan");//4.循环遍历取出每一个复选框中的元素
+    if(checkedElt)//全选
+    {
+        
+        for(var i=0;i<allCheck.length;i++)
+        {
+            //设置复选框的选中状态
+            allCheck[i].checked=true;
+        }
+        mySpan.innerHTML="取消全选";
+    }
+    else//取消全选
+    {
+        for(var i=0;i<allCheck.length;i++)
+        {
+            allCheck[i].checked=false;
+        }
+        mySpan.innerHTML="全选";
+    }
+}
+function ischecked()
+{
+    var allCheck = document.getElementsByClassName("file");//3.若checked=true,将所有的复选框选中,checked=false,将所有的复选框取消
+    for(var i=0;i<allCheck.length;i++)
+    {
+        if(allCheck[i].checked == true)
+        {
+            return true
+        }
+    }
+    alert("请选择要操作的IP组信息")
+    return false
+}
+
+function getValue(){
+
+        if(ischecked() == false)
+        {
+            return false;
+        }
+
+        var IP_Info = document.getElementsByName("IP_Infos");
+        var value;
+        for (i=0; i<IP_Info.length; i++){
+                if (IP_Info[i].checked){
+                        if (!value){
+                                value = IP_Info[i].value;
+                        } else {
+                                value += "," + IP_Info[i].value;
+                        }
+                }
+        }
+        
+        alert(value == undefined ? '' : value);
+}
+
+</script>
+
+        <hr/>
+
+<form action="/ejtagDebug/" method="post">
+{% csrf_token %}
+功能:EJTAG调试<br/>
+请输入调试器IP信息:<br/>
+ <table> 
+      <tr> 
+
+        <td>
+          <div class="form-group-ejtag">
+           <label><input name="ejtagIP" id="ejtagIP" type="text" /> </label> <br />
+          </div>
+        </td>
+
+        <td>
+          <div class="form-group-ejtag">
+           <label><input name="ejtagDebug" type="submit" onclick="return formSubmit()" value="提交" /> </label> <br />
+          </div>
+        </td>
+
+      </tr>
+ </table>
+
+<script type="text/javascript">
+//提交查询内容  
+function formSubmit() {  
+        var condId = document.getElementById('ejtagIP');
+        var text = condId.value;  
+        var textValue = text.replace(/(^\s*)|(\s*$)/g, "");     //替换输入内容当中所有的空字符，包括全角空格，半  
+        if(textValue==null || textValue=="") {  
+            alert("输入的内容为空，请输入调试器IP！");  
+            return false;  
+        }  
+          
+        }  
+</script>
+
+</form>
+
+        <hr/>
+
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分类测试</title>
+</head>
+<body>
+
+您已选择要进行操作的IP组信息:<br/><br/>
+
+
+ <table border="1" cellspacing="0" >                   
+
+      <tr>
+        <th>IP组</th>
+        <th>是否选择</th>
+      </tr>
+      {% for ipaddr in ipaddrs %}
+      <tr>
+
+        <td align="center">  {{ipaddr}}</td>
+        <td align="center"> 是</td>
+
+      </tr>
+      {% endfor %}
+
+ </table>
+
+<br/>
+
+        <hr/>
+<br/>
+
+请选择您要执行的操作，然后提交<br/>
+    <form action="/login/" method="POST">
+            {% csrf_token %}
+
+        <p>
+            测试在线状态：<input type="radio" name="project_name" value="check"/>
+            开机测试：<input type="radio" name="project_name" value="poweron"/>
+            关机测试：<input type="radio" name="project_name" value="poweroff"/>
+        </p>
+        <p>
+            <input type="submit" value="提交" />
+        </p>
+    </form>
+
+    <div id="result">
+
+        <h1>{{ hello }}</h1>
+
+    </div>
+
+
+</body>
+</html>

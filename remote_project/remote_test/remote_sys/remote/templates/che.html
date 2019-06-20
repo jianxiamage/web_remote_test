@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+
+<form action="" method="POST"> {% csrf_token %}
+
+        <table>
+        <thead>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        </thead>
+{#    <form action="" method="POST"> {% csrf_token %}#}
+    {% for i in a %}
+         <tbody>
+         <td><input type="checkbox" value="{{ i }}" name="check_box_list" >{{ i }}</td>
+         <td>234</td>
+        </tbody>
+
+    {% endfor %}
+    </table>
+<input type="submit" value="提交"/>
+</form>
+{#<input type="checkbox" value="1" name="check_box_list"/>1#}
+{##}
+{#<input type="checkbox" value="2" name="check_box_list"/>2#}
+{##}
+{#<input type="checkbox" value="3" name="check_box_list"/>3#}
+{##}
+{#<input type="submit" value="提交"/>#}
+
+
+
+</body>
+</html>

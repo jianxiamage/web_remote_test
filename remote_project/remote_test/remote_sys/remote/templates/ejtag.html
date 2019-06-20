@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+</head>
+ 
+<body>
+    <div id="header">
+        要连接的调试器IP:
+    </div>
+ 
+    <!-- 在文本框内输入一个数字，点击输入完毕按钮，将在本地生成一个input.txt，内容为输入的数字 -->
+
+ 
+    <p></p>
+    <div id="result">
+       
+        {{ ipinfo }}
+        <br/>
+<!--        {{ serverip }}
+            {{ serverip|safe }}
+
+-->
+    </div>
+
+        <hr/>
+请点击连接按钮:<br/>
+<td>
+  <a href="#">
+<button type="button" class="btn bg-block btn-default bg-aqua" onclick="return pop('{{ ipinfo }}')" >连接</button>
+  </a>
+</td>
+
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/layer/layer.js"></script>
+
+        <hr/>
+<!--
+<div class="btn" id="test2">Layer组件测试按钮</div>
+-->
+<script>
+layer.msg('请连接调试器开始EJTAG测试');
+
+//弹出一个页面层
+//$('#test2').on('click', function(){
+//layer.open({
+//  title: '测试组件',
+//  type: 1,
+//  area: ['600px', '360px'],
+//  shadeClose: true, //点击遮罩关闭
+//  content: '\<\div style="padding:20px;">测试组件内容\<\/div>'
+// });
+//});
+
+</script>
+
+<script>
+function pop(n){
+    var serverip = {{ serverip|safe }};
+    //alert(serverip)
+    hostip = serverip
+    //var hostip='10.20.42.41'
+    var hostport='8888'
+    content_str='http:\/\/'+hostip+':'+hostport+'\/?host='+n
+    //alert(content_str)
+    layer.open({
+    type: 2,
+    title: '建立web远程连接',
+    closeBtn: 1,
+    area: ['700px', '550px'],
+    shadeClose: false, //点击遮罩关闭
+    //content: ['http://10.20.42.41:8888/?host='+n,],
+    content: [content_str],
+    end:function(){
+            var handle_status = $("#handle_status").val();
+            if ( handle_status == '1' ) {
+                layer.msg('连接成功！',{
+                    icon: 1,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                },function(){
+                    history.go(0);
+                });
+            } else if ( handle_status == '2' ) {
+                layer.msg('连接失败！',{
+                    icon: 2,
+                    time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                },function(){
+                    history.go(0);
+                });
+            }
+        }
+  });
+}
+
+
+</script>
+
+</body>
+ 
+</html>
